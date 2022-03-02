@@ -8,6 +8,12 @@ class PublicationAdapter :  RecyclerView.Adapter<PublicationViewHolder>(){
 
     private val publications = ArrayList<Publication>()
 
+    init {
+        publications.add(Publication("Juan","123456","8:52","sdfsdfsdf"))
+        publications.add(Publication("Fernanda","987456","9:35","dsfdsfs"))
+        publications.add(Publication("Josue","321789","10:02","dsfsdfsd"))
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PublicationViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val row = inflater.inflate(R.layout.publicationrow,parent,false)
@@ -22,6 +28,10 @@ class PublicationAdapter :  RecyclerView.Adapter<PublicationViewHolder>(){
         holder.locationText.text = publication.location
         holder.captionText.text = publication.caption
 
+    }
+
+    fun addPublication(publication:Publication){
+        publications.add(publication)
     }
 
     override fun getItemCount(): Int {
