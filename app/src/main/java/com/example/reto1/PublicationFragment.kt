@@ -23,8 +23,8 @@ class PublicationFragment : Fragment() {
         val view = binding.root
 
         binding.publishBtn.setOnClickListener {
-            val captionET = binding.captionET.text.toString()
-            val publication = Publication("Juan Camilo",captionET,"2 marzo 2020","Cali, Colombia")
+            var captionET = binding.captionET.text.toString()
+            var publication = Publication("Juan Camilo",captionET,"2 marzo 2020","Cali, Colombia")
 
             listener?.let {
                 it.onNewPublication(publication)

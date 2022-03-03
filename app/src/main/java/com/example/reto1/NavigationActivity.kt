@@ -26,6 +26,8 @@ class NavigationActivity : AppCompatActivity() {
 
         showFragment(homeFragment)
 
+        binding.navigatorBtn.setBackgroundColor(8)
+
         binding.navigatorBtn.setOnItemSelectedListener { menuItem ->
             if (menuItem.itemId == R.id.homeItem) {
                 showFragment(homeFragment)
