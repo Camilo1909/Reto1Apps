@@ -24,7 +24,7 @@ class HomeFragment : Fragment(), PublicationFragment.OnNewPublicationListener {
         val view = binding.root
 
         val publicationRecycler = binding.publicationRecycler
-        publicationRecycler.setHasFixedSize(true)
+        publicationRecycler.setHasFixedSize(false)
         publicationRecycler.layoutManager = LinearLayoutManager(activity)
         publicationRecycler.adapter = adapter
         return view
@@ -41,6 +41,6 @@ class HomeFragment : Fragment(), PublicationFragment.OnNewPublicationListener {
     }
 
     override fun onNewPublication(publication: Publication) {
-        adapter.addPublication(publication)
+        this.adapter.addPublication(publication)
     }
 }
