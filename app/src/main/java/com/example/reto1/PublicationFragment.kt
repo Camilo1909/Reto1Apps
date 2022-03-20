@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
@@ -36,12 +37,14 @@ class PublicationFragment : Fragment() {
         _binding = FragmentPublishBinding.inflate(inflater,container,false)
         val view = binding.root
 
+        val context = activity as NavigationActivity
+
         val cameralauncher = registerForActivityResult(StartActivityForResult(), ::onCameraResult)
         val gallerylauncher = registerForActivityResult(StartActivityForResult(), ::onGalleryResult)
 
         binding.cameraBtn.setOnClickListener {
             val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            val context = activity as NavigationActivity
+
             file = File("${context.getExternalFilesDir(null)}/photo.png")
             val uri = FileProvider.getUriForFile(context, context.packageName,file!!)
             intent.putExtra(MediaStore.EXTRA_OUTPUT,uri)
@@ -55,16 +58,29 @@ class PublicationFragment : Fragment() {
             gallerylauncher.launch(intent)
         }
 
+        var citys = ArrayList<String>()
+        citys.add("Bogota")
+        citys.add("Cali")
+        citys.add("Cartagena")
+        citys.add("Medellin")
+        citys.add("San Andres")
+
+        var spinnerAdapter = ArrayAdapter<String>(context, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,citys)
+
+        binding.spinner.setAdapter(spinnerAdapter)
+
         binding.publishBtn.setOnClickListener{
+            val city = binding.spinner.selectedItem.toString()
             val captionET = binding.captionET.text.toString()
+            val myDate = Calendar.getInstance().time
+            val myString = DateFormat.getDateInstance().format(myDate);
 
            // Toast.makeText(activity,"Publicacion sin hacer", Toast.LENGTH_SHORT).show()
 
             listener?.let {
-                val myDate = Calendar.getInstance().time
-                val myString = DateFormat.getDateInstance().format(myDate);
 
-                val publication = Publication("Juan Camilo",captionET,myString,"Cali, Colombia")
+
+                val publication = Publication("Juan Camilo",captionET,myString,"${city}, Colombia")
                 it.onNewPublication(publication)
                 Toast.makeText(activity,"Publicacion hecha", Toast.LENGTH_SHORT).show()
             }
