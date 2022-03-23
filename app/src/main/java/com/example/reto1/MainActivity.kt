@@ -6,19 +6,26 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
+import com.example.reto1.databinding.ActivityMainBinding
+import com.example.reto1.databinding.ActivityNavigationBinding
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var loginBtn:Button
 
+    private lateinit var binding: ActivityMainBinding
+
     var allGrant = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
         loginBtn = findViewById(R.id.loginBtn)
 
@@ -28,12 +35,26 @@ class MainActivity : AppCompatActivity() {
         ),1)
         loginBtn.setOnClickListener{
             if (allGrant){
-                val intent = Intent(this,NavigationActivity::class.java)
-                startActivity(intent)
+                if(validation(binding.usernameEt.text.toString(),binding.passwordET.text.toString())){
+                    val intent = Intent(this,NavigationActivity::class.java)
+                    startActivity(intent)
+                }else{
+                    Toast.makeText(this,"Por favor ingrese credenciales correctas",Toast.LENGTH_LONG).show()
+                }
             }else{
                 Toast.makeText(this,"Por favor aceptar todos los permisos",Toast.LENGTH_LONG).show()
             }
         }
+    }
+
+    fun validation(username:String, password:String):Boolean{
+        var validate = false
+        if((username.contentEquals("alfa@gmail.com")&&password.contentEquals("aplicacionesmoviles"))
+            || (username.contentEquals("beta@gmail.com")&&password.contentEquals("aplicacionesmoviles"))){
+            validate = true
+        }
+        Log.e(">>>","${validate}")
+        return validate
     }
 
     override fun onRequestPermissionsResult(
