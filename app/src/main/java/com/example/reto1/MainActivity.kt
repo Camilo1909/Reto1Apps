@@ -16,7 +16,6 @@ import com.example.reto1.databinding.ActivityNavigationBinding
 class MainActivity : AppCompatActivity() {
 
     private lateinit var loginBtn:Button
-
     private lateinit var binding: ActivityMainBinding
 
     var allGrant = true

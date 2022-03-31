@@ -1,5 +1,6 @@
 package com.example.reto1
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -7,13 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.reto1.databinding.FragmentHomeBinding
+import com.google.gson.Gson
 
 class HomeFragment : Fragment(), PublicationFragment.OnNewPublicationListener {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
-    private val adapter = PublicationAdapter()
+    private var adapter = PublicationAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,10 +30,9 @@ class HomeFragment : Fragment(), PublicationFragment.OnNewPublicationListener {
         publicationRecycler.layoutManager = LinearLayoutManager(activity)
         publicationRecycler.adapter = adapter
 
-
-
         return view
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -44,6 +45,6 @@ class HomeFragment : Fragment(), PublicationFragment.OnNewPublicationListener {
     }
 
     override fun onNewPublication(publication: Publication) {
-        adapter.addPublication(publication)
+        this.adapter.addPublication(publication)
     }
 }
