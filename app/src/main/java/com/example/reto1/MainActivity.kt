@@ -12,11 +12,14 @@ import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import com.example.reto1.databinding.ActivityMainBinding
 import com.example.reto1.databinding.ActivityNavigationBinding
+import com.google.gson.Gson
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var loginBtn:Button
     private lateinit var binding: ActivityMainBinding
+
+    private lateinit var user: User
 
     var allGrant = true
 
@@ -36,6 +39,7 @@ class MainActivity : AppCompatActivity() {
             if (allGrant){
                 if(validation(binding.usernameEt.text.toString(),binding.passwordET.text.toString())){
                     val intent = Intent(this,NavigationActivity::class.java)
+                    intent.putExtra("logUser", Gson().toJson(user))
                     startActivity(intent)
                 }else{
                     Toast.makeText(this,"Por favor ingrese credenciales correctas",Toast.LENGTH_LONG).show()
@@ -47,10 +51,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun validation(username:String, password:String):Boolean{
+        val user1 = User("Juan","alfa@gmail.com")
+        val user2 = User("Camilo","beta@gmail.com")
         var validate = false
-        if((username.contentEquals("alfa@gmail.com")&&password.contentEquals("aplicacionesmoviles"))
-            || (username.contentEquals("beta@gmail.com")&&password.contentEquals("aplicacionesmoviles"))){
+        if((username.contentEquals(user1.userName)&&password.contentEquals(user1.password))
+            || (username.contentEquals(user2.userName)&&password.contentEquals(user2.password))){
             validate = true
+            user = User("Name",username)
         }
         Log.e(">>>","${validate}")
         return validate

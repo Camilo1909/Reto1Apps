@@ -2,9 +2,9 @@ package com.example.reto1
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.icu.text.DateFormat
-import android.icu.util.Calendar
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
@@ -19,6 +19,8 @@ import androidx.activity.result.contract.ActivityResultContracts.StartActivityFo
 import androidx.core.content.FileProvider
 import com.example.reto1.databinding.FragmentPublishBinding
 import java.io.File
+import java.util.*
+import kotlin.collections.ArrayList
 
 class PublicationFragment : Fragment() {
 
@@ -26,8 +28,9 @@ class PublicationFragment : Fragment() {
     private val binding get() = _binding!!
 
     private var file:File? = null
+    private var URI:String = ""
 
-    var listener: OnNewPublicationListener?=null
+    var listener: OnNewPostListener?=null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,6 +51,7 @@ class PublicationFragment : Fragment() {
             file = File("${context.getExternalFilesDir(null)}/photo.png")
             val uri = FileProvider.getUriForFile(context, context.packageName,file!!)
             intent.putExtra(MediaStore.EXTRA_OUTPUT,uri)
+            this.URI = uri.toString()
             Log.e(">>>",file?.path.toString())
             cameralauncher.launch(intent)
         }
@@ -74,18 +78,12 @@ class PublicationFragment : Fragment() {
             val captionET = binding.captionET.text.toString()
             val myDate = Calendar.getInstance().time
             val myString = DateFormat.getDateInstance().format(myDate);
-
-           // Toast.makeText(activity,"Publicacion sin hacer", Toast.LENGTH_SHORT).show()
-
             listener?.let {
-
-
-                val publication = Publication("Juan Camilo",captionET,myString,"${city}, Colombia")
-                it.onNewPublication(publication)
-                Toast.makeText(activity,"Publicacion hecha", Toast.LENGTH_SHORT).show()
+                val publication = Publication(context.user.name,captionET,myString,"${city}, Colombia",URI,context.user.imgProfile)
+                it.onNewPost(publication)
             }
+            URI = ""
         }
-
         return view
     }
 
@@ -94,7 +92,8 @@ class PublicationFragment : Fragment() {
        // binding.photoIMG.setImageBitmap(bitmap)
         if(result.resultCode == Activity.RESULT_OK){
             val bitmap = BitmapFactory.decodeFile(file?.path)
-            binding.photoIMG.setImageBitmap(bitmap)
+            val thumball = Bitmap.createScaledBitmap(bitmap, bitmap.width/4,bitmap.height/4,true)
+            binding.photoIMG.setImageBitmap(thumball)
         }else if(result.resultCode == Activity.RESULT_CANCELED){
             Toast.makeText(activity,"No tomo la foto",Toast.LENGTH_SHORT).show()
         }
@@ -115,9 +114,9 @@ class PublicationFragment : Fragment() {
         _binding = null
     }
 
-    interface OnNewPublicationListener{
-        fun onNewPublication(publication:Publication)
-    }
+   interface OnNewPostListener{
+       fun onNewPost(publication: Publication)
+   }
 
     companion object {
         @JvmStatic

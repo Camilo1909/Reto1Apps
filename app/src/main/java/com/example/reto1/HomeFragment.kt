@@ -10,12 +10,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.reto1.databinding.FragmentHomeBinding
 import com.google.gson.Gson
 
-class HomeFragment : Fragment(), PublicationFragment.OnNewPublicationListener {
+class HomeFragment : Fragment(), PublicationFragment.OnNewPostListener {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
-    private var adapter = PublicationAdapter()
+    private val adapter = PublicationAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,7 +44,7 @@ class HomeFragment : Fragment(), PublicationFragment.OnNewPublicationListener {
         fun newInstance() = HomeFragment()
     }
 
-    override fun onNewPublication(publication: Publication) {
-        this.adapter.addPublication(publication)
+    override fun onNewPost(publication: Publication) {
+        adapter.addPublication(publication)
     }
 }

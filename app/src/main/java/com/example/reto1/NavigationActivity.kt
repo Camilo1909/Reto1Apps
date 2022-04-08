@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.example.reto1.databinding.ActivityNavigationBinding
+import com.google.gson.Gson
 
 class NavigationActivity : AppCompatActivity() {
 
@@ -13,16 +14,23 @@ class NavigationActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityNavigationBinding
 
+    public lateinit var user: User
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        val logUser = intent.getStringExtra("logUser")
         super.onCreate(savedInstanceState)
         //setContentView(R.layout.activity_navigation)
         binding = ActivityNavigationBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
 
+        user = Gson().fromJson(logUser,User::class.java)
+
         homeFragment = HomeFragment.newInstance()
         publicationFragment = PublicationFragment.newInstance()
         myProfileFragment = MyProfileFragment.newInstance()
+
+        publicationFragment.listener = homeFragment
 
         showFragment(homeFragment)
 
