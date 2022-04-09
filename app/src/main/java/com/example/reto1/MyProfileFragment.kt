@@ -17,6 +17,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 import com.example.reto1.databinding.FragmentHomeBinding
 import com.example.reto1.databinding.FragmentMyProfileBinding
+import com.google.gson.Gson
 import java.io.File
 
 class MyProfileFragment : Fragment() {
@@ -34,7 +35,6 @@ class MyProfileFragment : Fragment() {
         // Inflate the layout for this fragment
       _binding = FragmentMyProfileBinding.inflate(inflater,container,false)
       val view = binding.root
-
       val context = activity as NavigationActivity
       binding.nameET.setText(context.user.name)
 
@@ -62,6 +62,13 @@ class MyProfileFragment : Fragment() {
             context.user.name = binding.nameET.getText().toString()
             context.user.imgProfile = URI
         }
+
+        binding.btLogout.setOnClickListener {
+            val intent = Intent(context,MainActivity::class.java)
+            intent.putExtra("logUser", Gson().toJson(context.user))
+            startActivity(intent)
+
+        }
       return view
     }
 
@@ -85,10 +92,14 @@ class MyProfileFragment : Fragment() {
     fun onGalleryResult(result: ActivityResult){
         if(result.resultCode == Activity.RESULT_OK){
             val uriImage = result.data?.data
+
             uriImage?.let {
                 binding.imgPerfil.setImageURI(uriImage)
             }
 
         }
+    }
+    override fun onResume() {
+        super.onResume()
     }
 }

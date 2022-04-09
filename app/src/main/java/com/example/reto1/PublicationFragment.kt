@@ -30,7 +30,7 @@ class PublicationFragment : Fragment() {
     private var file:File? = null
     private var URI:String = ""
 
-    var listener: OnNewPostListener?=null
+    var listener: OnNewPublicationListener?=null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -80,7 +80,7 @@ class PublicationFragment : Fragment() {
             val myString = DateFormat.getDateInstance().format(myDate);
             listener?.let {
                 val publication = Publication(context.user.name,captionET,myString,"${city}, Colombia",URI,context.user.imgProfile)
-                it.onNewPost(publication)
+                it.onNewPublication(publication)
             }
             URI = ""
         }
@@ -114,8 +114,8 @@ class PublicationFragment : Fragment() {
         _binding = null
     }
 
-   interface OnNewPostListener{
-       fun onNewPost(publication: Publication)
+   interface OnNewPublicationListener{
+       fun onNewPublication(publication: Publication)
    }
 
     companion object {
