@@ -106,15 +106,19 @@ class MainActivity : AppCompatActivity() {
             user = Gson().fromJson(json, User::class.java)
             Log.e("---->","${user}")
             Log.e("---->","${nuser}")
-            if(user!=nuser){
+            if(user?.userName!=nuser?.userName){
                 val intent = Intent(this, NavigationActivity::class.java)
                 intent.putExtra("logUser", Gson().toJson(user))
                 startActivity(intent)
             }else{
                 sharedPref.edit().remove("currentState").commit()
-                sharedPref.edit().clear().apply()
+              //  sharedPref.edit().clear().apply()
             }
         }
+    }
+
+    fun getUser():User?{
+        return user
     }
 }
 

@@ -8,7 +8,15 @@ import java.net.URI
 
 class PublicationAdapter :  RecyclerView.Adapter<PublicationViewHolder>(){
 
-    private val publications = ArrayList<Publication>()
+    private var publications = ArrayList<Publication>()
+
+    fun getPublications():ArrayList<Publication>{
+        return publications
+    }
+
+    fun setPublications(publications:ArrayList<Publication>){
+        this.publications = publications
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PublicationViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -18,6 +26,7 @@ class PublicationAdapter :  RecyclerView.Adapter<PublicationViewHolder>(){
     }
 
     override fun onBindViewHolder(holder: PublicationViewHolder, position: Int) {
+
         val publication = publications[position]
         val UR1 = Uri.parse(publication.URI)
         val URIprofile = Uri.parse(publication.URIprofile)

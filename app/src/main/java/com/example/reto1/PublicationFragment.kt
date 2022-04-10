@@ -81,6 +81,7 @@ class PublicationFragment : Fragment() {
             listener?.let {
                 val publication = Publication(context.user.name,captionET,myString,"${city}, Colombia",URI,context.user.imgProfile)
                 it.onNewPublication(publication)
+
             }
             URI = ""
         }
