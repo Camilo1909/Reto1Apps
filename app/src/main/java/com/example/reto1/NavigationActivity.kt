@@ -63,9 +63,19 @@ class NavigationActivity : AppCompatActivity() {
         if(homeFragment.getAdapter().getPublications().size != 0){
             val json = Gson().toJson(homeFragment.getAdapter().getPublications())
             val sharedPref = getPreferences(Context.MODE_PRIVATE)
-            sharedPref.edit().putString("recyclerState", json).apply()
             Log.e(">>>",json)
+            val jsonU = Gson().toJson(user)
+            sharedPref.edit().putString("recyclerState", json)
+                .putString("currentState", jsonU)
+                .apply()
+            Log.e(">>>",jsonU)
+        }else{
+            val jsonU = Gson().toJson(user)
+            val sharedPref = getPreferences(Context.MODE_PRIVATE)
+            sharedPref.edit().putString("currentState", jsonU).apply()
+            Log.e("->>>>>>>>","Esta serializando")
         }
+
     }
 
     override fun onResume() {
@@ -85,5 +95,11 @@ class NavigationActivity : AppCompatActivity() {
             //adapter.setPublications(publications as ArrayList<Publication>)
             //publicationRecycler = publications
         }
+        val jsonU = sharedPref.getString("currentState", "NO_DATA")
+        if (jsonU != "NO_DATA") {
+            user = Gson().fromJson(jsonU, User::class.java)
+            Log.e("---->","${user}")
+        }
+
     }
 }

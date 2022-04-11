@@ -39,8 +39,11 @@ class MyProfileFragment : Fragment() {
       val view = binding.root
       val context = activity as NavigationActivity
       binding.nameET.setText(context.user.name)
+        if(context.user.imgProfile!=""){
         val uri = Uri.parse(context.user.imgProfile)
-        //binding.imgPerfil.setImageURI(uri)
+            binding.imgPerfil.setImageURI(uri)
+        }
+
 
       val cameralauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult(), ::onCameraResult)
       val gallerylauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult(), ::onGalleryResult)
@@ -65,18 +68,14 @@ class MyProfileFragment : Fragment() {
         binding.btEdit.setOnClickListener {
             context.user.name = binding.nameET.getText().toString()
             context.user.imgProfile = URI
-           /* val c = activity as MainActivity
-            val json = Gson().toJson(context.user)
-            val sharedPref = c.getPreferences(Context.MODE_PRIVATE)
-            sharedPref.edit().putString("currentState", json).apply()
-        */}
+        }
 
         binding.btLogout.setOnClickListener {
             val intent = Intent(context,MainActivity::class.java)
             intent.putExtra("logUser", Gson().toJson(context.user))
             startActivity(intent)
-
         }
+
       return view
     }
 

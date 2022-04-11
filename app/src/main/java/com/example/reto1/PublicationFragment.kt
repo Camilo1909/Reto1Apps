@@ -48,8 +48,8 @@ class PublicationFragment : Fragment() {
         binding.cameraBtn.setOnClickListener {
             val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
 
-            file = File("${context.getExternalFilesDir(null)}/photo.png")
-            val uri = FileProvider.getUriForFile(context, context.packageName,file!!)
+            file = File("${requireActivity().getExternalFilesDir(null)}/photo.png")
+            val uri = FileProvider.getUriForFile(requireActivity(), requireActivity().packageName,file!!)
             intent.putExtra(MediaStore.EXTRA_OUTPUT,uri)
             this.URI = uri.toString()
             Log.e(">>>",file?.path.toString())

@@ -22,7 +22,10 @@ class MainActivity : AppCompatActivity() {
 
     private var user: User? = null
     private var nuser: User? = null
-    var allGrant = true
+    private var allGrant = true
+
+    private var user1 = User("Juan", "alfa@gmail.com")
+    private var user2 = User("Camilo", "beta@gmail.com")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +38,8 @@ class MainActivity : AppCompatActivity() {
         requestPermissions(
             arrayOf(
                 Manifest.permission.CAMERA,
-                Manifest.permission.READ_EXTERNAL_STORAGE
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
             ), 1
         )
         loginBtn.setOnClickListener {
@@ -63,14 +67,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun validation(username: String, password: String): Boolean {
-        val user1 = User("Juan", "alfa@gmail.com")
-        val user2 = User("Camilo", "beta@gmail.com")
+
         var validate = false
         if ((username.contentEquals(user1.userName) && password.contentEquals(user1.password))
             || (username.contentEquals(user2.userName) && password.contentEquals(user2.password))
         ) {
-            validate = true
-            user = User("Name", username)
+            if (username.contentEquals(user1.userName)){
+                validate = true
+                user = user1
+            }else{
+                validate = true
+                user = user2
+            }
         }
         return validate
     }
@@ -91,8 +99,14 @@ class MainActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         val json = Gson().toJson(user)
+        val json1 = Gson().toJson(user1)
+        val json2 = Gson().toJson(user2)
         val sharedPref = getPreferences(Context.MODE_PRIVATE)
-        sharedPref.edit().putString("currentState", json).apply()
+        sharedPref.edit()
+            .putString("currentState", json)
+           // .putString("currentState1", json1)
+            //.putString("currentState2", json2)
+            .apply()
     }
 
     override fun onResume() {
@@ -112,9 +126,34 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
             }else{
                 sharedPref.edit().remove("currentState").commit()
+                if (nuser?.userName==user1.userName){
+                    user1.name = nuser?.name!!
+                    user1.imgProfile = nuser?.imgProfile!!
+                    val json1u = Gson().toJson(user1)
+                    sharedPref.edit()
+                        .putString("currentState1", json1u)
+                        .apply()
+                }else if(nuser?.userName==user2.userName){
+                    user2.name = nuser?.name!!
+                    user2.imgProfile = nuser?.imgProfile!!
+                    val json2u = Gson().toJson(user2)
+                    sharedPref.edit()
+                        .putString("currentState2", json2u)
+                        .apply()
+                }
               //  sharedPref.edit().clear().apply()
             }
         }
+        val json1 = sharedPref.getString("currentState1", "NO_DATA")
+        val json2 = sharedPref.getString("currentState2", "NO_DATA")
+        if (json1 != "NO_DATA"){
+            user1 = Gson().fromJson(json1, User::class.java)
+        }
+        if (json2 != "NO_DATA"){
+            user2 = Gson().fromJson(json2, User::class.java)
+        }
+
+
     }
 
     fun getUser():User?{
